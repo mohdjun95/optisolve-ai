@@ -1,0 +1,28 @@
+# Secrets
+.env
+gapi.env
+gapi.txt
+
+# Old Streamlit app
+streamlit_LP_solver.py
+streamlit_LP_solver_old.py
+.streamlit/
+
+# Notebooks and dev files
+*.ipynb
+.ipynb_checkpoints/
+
+# Sample documents
+*.pdf
+*.png
+*.jpg
+*.xlsx
+
+# Misc
+Langchain tutorial/
+NSP/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.venv/

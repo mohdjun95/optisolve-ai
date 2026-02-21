@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Solver — OptiSolve AI{% endblock %}
+
+{% block content %}
+
+<div class="app-container">
+
+    <!-- Page Header -->
+    <div style="text-align:center; margin-bottom:40px;">
+        <h1 style="font-size:1.875rem; font-weight:700; margin-bottom:8px;">Optimization Solver</h1>
+        <p style="color:var(--text-muted);">Upload a document, let AI extract the formulation, and get the optimal solution.</p>
+    </div>
+
+    <!-- Configuration -->
+    <div class="card">
+        <div class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span>Configuration</span>
+            {% if has_server_key %}
+            <span class="server-key-badge">Server API key active</span>
+            {% endif %}
+        </div>
+        <div class="form-grid">
+            <div>
+                <label class="form-label" for="api-key">
+                    Google API Key
+                    {% if has_server_key %}<span class="hint">(optional)</span>{% endif %}
+                </label>
+                <input type="password" id="api-key" class="form-input" placeholder="Enter your Gemini API key" autocomplete="off">
+            </div>
+            <div>
+                <label class="form-label" for="model-select">Gemini Model</label>
+                <select id="model-select" class="form-input">
+                    {% for model in models %}
+                    <option value="{{ model }}" {% if loop.first %}selected{% endif %}>{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="upload-zone"
+        ondragover="event.preventDefault(); this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="handleDrop(event)"
+        onclick="document.getElementById('file-input').click()">
+
+        <input type="file" id="file-input" style="display:none"
+            accept=".pdf,.txt,.docx,.doc,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,.xlsx,.xls,.csv"
+            onchange="handleFileSelect(this)">
+
+        <div id="upload-placeholder">
+            <div class="upload-icon">
+                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p class="upload-title">Drop your file here</p>
+            <p class="upload-sub">or click to browse</p>
+            <p class="upload-formats">PDF, Images, Text, Word, Excel, CSV &middot; Max 50MB</p>
+        </div>
+
+        <div id="file-preview" class="file-preview">
+            <div class="file-preview-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+                <p class="file-preview-name" id="file-name"></p>
+                <p class="file-preview-meta" id="file-meta"></p>
+            </div>
+            <button class="file-remove" onclick="event.stopPropagation(); clearFile()" title="Remove file">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Solve Button -->
+    <button id="solve-btn" class="btn btn-solve" onclick="solve()" disabled>
+        Extract &amp; Solve
+    </button>
+
+    <!-- Progress -->
+    <div id="progress-section" class="card progress-card hidden">
+        <div class="progress-header">
+            <div class="spinner"></div>
+            <p id="progress-text">Processing...</p>
+        </div>
+        <div>
+            <div class="progress-step" id="step-upload">
+                <div class="step-icon step-pending">1</div>
+                <span>Uploading document to Gemini AI</span>
+            </div>
+            <div class="progress-step" id="step-extract">
+                <div class="step-icon step-pending">2</div>
+                <span>AI analyzing and extracting formulation</span>
+            </div>
+            <div class="progress-step" id="step-solve">
+                <div class="step-icon step-pending">3</div>
+                <span>Solving optimization problem</span>
+            </div>
+            <div class="progress-step" id="step-done">
+                <div class="step-icon step-pending">4</div>
+                <span>Preparing results</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div id="error-section" class="error-card hidden">
+        <svg class="error-icon-svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+            <h3>Something went wrong</h3>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-section" class="hidden">
+        <div id="result-banner" class="result-banner">
+            <span class="icon" id="result-icon"></span>
+            <div>
+                <h3 id="result-title"></h3>
+                <p id="result-subtitle"></p>
+            </div>
+        </div>
+
+        <div class="metrics-grid" id="metrics-row"></div>
+
+        <div id="objective-card" class="objective-card hidden">
+            <p class="objective-label" id="objective-label"></p>
+            <p class="objective-value" id="objective-value"></p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Solver Details</div>
+            <div id="solver-info" class="form-grid"></div>
+        </div>
+
+        <div id="variables-card" class="card hidden">
+            <div class="card-title">Decision Variables</div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th style="text-align:right;">Optimal Value</th>
+                            <th class="center">Type</th>
+                            <th class="center">Bounds</th>
+                        </tr>
+                    </thead>
+                    <tbody id="variables-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Formulation Display (equations) -->
+        <div id="formulation-card" class="card hidden">
+            <div class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+                <span>Problem Formulation</span>
+            </div>
+            <div id="formulation-display"></div>
+        </div>
+
+        <!-- Constraint Matrix Grid -->
+        <div id="constraint-grid-card" class="card hidden">
+            <div class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+                <span>Constraint Matrix</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table" id="constraint-grid-table"></table>
+            </div>
+        </div>
+
+        <!-- Constraints Summary (with sensitivity) -->
+        <div id="constraints-summary-card" class="card hidden">
+            <div class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                <span>Sensitivity Analysis</span>
+            </div>
+            <div id="sensitivity-note" class="sensitivity-note hidden">
+                Sensitivity analysis is not available for mixed-integer programs (MILP).
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead id="constraints-summary-thead"></thead>
+                    <tbody id="constraints-summary-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <details class="card" style="padding:0;">
+            <summary>View Raw Extraction Data</summary>
+            <div class="detail-body">
+                <pre class="code-block" id="formulation-json"></pre>
+            </div>
+        </details>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/solver.js"></script>
+{% endblock %}

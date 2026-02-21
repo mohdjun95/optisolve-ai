@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}OptiSolve AI — Solve LP/MILP Problems with AI{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            Powered by Gemini + OR-Tools
+        </div>
+        <h1>Solve LP/MILP Problems<br><span class="dim">with AI — Instantly</span></h1>
+        <p class="hero-sub">
+            Upload any document describing an optimization problem. AI reads it,
+            extracts the mathematical formulation, and finds the optimal solution.
+        </p>
+        <div class="hero-buttons">
+            <a href="/app" class="btn btn-hero-primary">Try It Now &rarr;</a>
+            <a href="#how-it-works" class="btn btn-hero-secondary">How It Works</a>
+        </div>
+    </div>
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 48" fill="none" preserveAspectRatio="none">
+            <path d="M0 48V16C480 0 960 32 1440 16V48H0Z" fill="#111114"/>
+        </svg>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" id="how-it-works">
+    <div class="section-inner">
+        <div class="section-header">
+            <p class="section-label">Process</p>
+            <h2 class="section-title">How It Works</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Upload Document</h3>
+                <p>Drop any PDF, image, text file, or spreadsheet containing an LP/MILP problem.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>AI Extracts Model</h3>
+                <p>Gemini reads the document and identifies the objective, constraints, bounds, and variable types.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Solver Optimizes</h3>
+                <p>OR-Tools finds the optimal solution and returns a complete breakdown of results.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="section section-alt" id="features">
+    <div class="section-inner">
+        <div class="section-header">
+            <p class="section-label">Capabilities</p>
+            <h2 class="section-title">Built for Real Problems</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <h3>Multi-Format Input</h3>
+                <p>PDF, images, text files, Word docs, and spreadsheets. If it describes an LP, we can read it.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a4 4 0 014 4c0 1.95-2 3-2 5h-4c0-2-2-3.05-2-5a4 4 0 014-4z"/><path d="M10 17v1a2 2 0 004 0v-1"/><line x1="10" y1="13" x2="14" y2="13"/></svg>
+                </div>
+                <h3>Gemini AI Extraction</h3>
+                <p>Chain-of-thought reasoning to identify variables, constraints, bounds, and objective functions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>
+                </div>
+                <h3>LP &amp; MILP Support</h3>
+                <p>Continuous and integer variables. Simple LP to complex Mixed-Integer models.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                </div>
+                <h3>Industrial Solver</h3>
+                <p>Google OR-Tools with SCIP and CBC — the same engines used in production worldwide.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <h3>Full Breakdown</h3>
+                <p>Extracted formulation, solver metadata, optimal objective, and every decision variable.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                </div>
+                <h3>Your Key, Your Data</h3>
+                <p>Bring your own API key. Files processed in-memory, never stored, deleted after use.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack -->
+<section class="section" id="tech">
+    <div class="section-inner">
+        <div class="section-header">
+            <p class="section-label">Under the hood</p>
+            <h2 class="section-title">Tech Stack</h2>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <svg class="tech-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a4 4 0 014 4c0 1.95-2 3-2 5h-4c0-2-2-3.05-2-5a4 4 0 014-4z"/><path d="M10 17v1a2 2 0 004 0v-1"/><line x1="10" y1="13" x2="14" y2="13"/></svg>
+                <div><strong>Google Gemini</strong><small>AI Extraction</small></div>
+            </div>
+            <div class="tech-item">
+                <svg class="tech-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                <div><strong>Google OR-Tools</strong><small>SCIP / CBC Solver</small></div>
+            </div>
+            <div class="tech-item">
+                <svg class="tech-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <div><strong>FastAPI</strong><small>Backend</small></div>
+            </div>
+            <div class="tech-item">
+                <svg class="tech-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <div><strong>Python</strong><small>Runtime</small></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+    <div class="cta-banner">
+        <h2>Ready to Solve?</h2>
+        <p>Upload your optimization problem and get results in seconds.</p>
+        <a href="/app" class="btn btn-hero-primary" style="position:relative; z-index:1;">Launch Solver &rarr;</a>
+    </div>
+</section>
+
+{% endblock %}

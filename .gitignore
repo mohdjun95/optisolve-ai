@@ -1,0 +1,42 @@
+# Secrets
+.env
+gapi.env
+gapi.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Old Streamlit app
+streamlit_LP_solver.py
+streamlit_LP_solver_old.py
+.streamlit/
+
+# Sample documents (not part of the app)
+*.pdf
+*.png
+*.jpg
+*.xlsx
+
+# Other project dirs not part of the app
+Langchain tutorial/
+NSP/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/
