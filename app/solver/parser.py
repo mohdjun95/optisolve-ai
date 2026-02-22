@@ -17,6 +17,11 @@ def parse_json_to_lp_vars(json_string: str) -> dict:
         }
 
     try:
+        # --- Kill switch: reject non-LP documents ---
+        if data.get("is_valid_lp") is False:
+            reason = data.get("rejection_reason", "Document does not contain a valid LP/MILP problem.")
+            return {"error": reason}
+
         # --- c (required) ---
         c = data.get("c")
         if not isinstance(c, list) or len(c) == 0:

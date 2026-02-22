@@ -60,11 +60,14 @@ function showProgress(text) {
 }
 
 // --- Solve ---
+var _progressTimer = null;
+
 async function solve() {
     if (!selectedFile) return;
 
     var apiKey = document.getElementById('api-key').value.trim();
     if (!apiKey) {
+        hideAll();
         showError('Please enter your Gemini API key. You can get one free at ai.google.dev.');
         return;
     }
@@ -88,7 +91,7 @@ async function solve() {
     formData.append('api_key', apiKey);
     formData.append('model_name', modelName);
 
-    setTimeout(function() {
+    _progressTimer = setTimeout(function() {
         setStep('step-upload', 'done');
         setStep('step-extract', 'active');
         showProgress('AI is analyzing your document...');
@@ -96,6 +99,9 @@ async function solve() {
 
     try {
         var response = await fetch('/api/solve', { method: 'POST', body: formData });
+        if (_progressTimer) { clearTimeout(_progressTimer); _progressTimer = null; }
+
+        setStep('step-upload', 'done');
         setStep('step-extract', 'done');
         setStep('step-solve', 'active');
         showProgress('Solving optimization problem...');
@@ -118,6 +124,7 @@ async function solve() {
             showError(data.error || 'Extraction or solving failed. Check your document and try again.');
         }
     } catch (err) {
+        if (_progressTimer) { clearTimeout(_progressTimer); _progressTimer = null; }
         document.getElementById('progress-section').classList.add('hidden');
         showError(err.message || 'An unexpected error occurred.');
     } finally {

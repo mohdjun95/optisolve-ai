@@ -8,7 +8,17 @@ You will receive an input document describing an optimization problem. This coul
 **Your Definitive Goal:**
 Extract the problem's components and format them as a JSON object. The output MUST be mathematically consistent and valid JSON.
 
+**CRITICAL — Document Validation (MUST CHECK FIRST):**
+Before extracting anything, determine whether the document actually contains a Linear Programming (LP) or Mixed-Integer Linear Programming (MILP) problem. If the document does NOT contain a valid optimization problem (e.g., it is a resume, a company report, a random article, a recipe, a financial statement, or any document without a clear objective function and constraints), you MUST return:
+```json
+{"is_valid_lp": false, "rejection_reason": "Brief explanation of why this is not an LP/MILP problem."}
+```
+Do NOT attempt to fabricate or guess an optimization problem from unrelated content. Only proceed with extraction if there is a genuine LP/MILP problem in the document.
+
+If the document IS a valid LP/MILP problem, include `"is_valid_lp": true` in your output along with all the fields below.
+
 **Required JSON Fields:**
+* `is_valid_lp`: true if the document contains a valid LP/MILP problem, false otherwise.
 * `problem_type`: Either "Minimization" or "Maximization".
 * `variable_names`: A list of short, descriptive string names for each decision variable, from the original document (e.g., ["chairs", "tables"]). Keep names short (1-3 words), lowercase, using underscores for spaces. If no meaningful names exist, use ["x1", "x2", ...].
 * `c`: A list of objective function coefficients (as they appear in the document). Provide the coefficients exactly as stated. Do NOT negate them.
