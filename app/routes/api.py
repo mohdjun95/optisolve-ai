@@ -1,7 +1,7 @@
 import pathlib
 from fastapi import APIRouter, File, Form, UploadFile, HTTPException
 
-from ..config import GOOGLE_API_KEY, ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_MB
+from ..config import ALLOWED_EXTENSIONS, MAX_UPLOAD_SIZE_MB
 from ..solver.extractor import extract_lp_from_file
 from ..solver.engine import solve_lp
 
@@ -14,10 +14,10 @@ async def solve(
     api_key: str = Form(""),
     model_name: str = Form("gemini-1.5-pro-latest"),
 ):
-    # Resolve API key: user-provided takes priority, then server env
-    effective_key = api_key.strip() or GOOGLE_API_KEY
+    # Require user-provided API key
+    effective_key = api_key.strip()
     if not effective_key:
-        raise HTTPException(status_code=400, detail="No API key provided. Enter one in the app or set GOOGLE_API_KEY on the server.")
+        raise HTTPException(status_code=400, detail="No API key provided. Enter your Gemini API key in the form above.")
 
     # Validate file extension
     suffix = pathlib.Path(file.filename).suffix.lower()

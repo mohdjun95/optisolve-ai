@@ -64,6 +64,10 @@ async function solve() {
     if (!selectedFile) return;
 
     var apiKey = document.getElementById('api-key').value.trim();
+    if (!apiKey) {
+        showError('Please enter your Gemini API key. You can get one free at ai.google.dev.');
+        return;
+    }
     var modelName = document.getElementById('model-select').value;
 
     hideAll();
