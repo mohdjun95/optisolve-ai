@@ -14,6 +14,7 @@
 <body>
 
     <!-- Navbar -->
+    {% block navbar %}
     <nav class="navbar">
         <div class="navbar-inner">
             <a href="/" class="nav-logo">
@@ -37,6 +38,7 @@
             <a href="/app" class="btn btn-primary" style="text-align:center;">Launch App</a>
         </div>
     </nav>
+    {% endblock %}
     <div class="nav-spacer"></div>
 
     <main>
